@@ -3,6 +3,13 @@
 # FullStack - Harjoitus 0.4
 
 selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+
+note over palvelin
+Palvelin lisää uuden muistiinpanon omaan
+tietovarastoonsa, ja lähettää selaimelle
+kehotuksen ladata sivu /exampleapp/notes
+end note
+
 palvelin-->selain: Redirect to: /exampleapp/notes
 selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
 palvelin-->selain: HTML-koodi
@@ -31,3 +38,6 @@ note over selain
 Selain suorittaa tapahtumakäsittelijän JavaScript
 -koodin, joka renderöi JSON-datan luettavaan muotoon.
 end note
+
+
+
