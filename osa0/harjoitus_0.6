@@ -1,0 +1,23 @@
+# Sekvenssikaavio: https://www.websequencediagrams.com/
+#
+# FullStack - Harjoitus 0.6
+
+note over selain
+Selain suorittaa JavaScript-koodin, joka lisää uuden
+muistiinpanon selaimella olevaan sisäiseen
+tietorakenteeseen, ja renderöi sen näkyviin ruudulle.
+end note
+
+note over selain
+Selain lähettää palvelimelle uuden muistiinpanon, ja
+pyynnön lisätä se muistiinpanolistaan.
+end note
+
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over palvelin
+Palvelin vastaa selaimelle, että lisäys
+onnistui. (koodi 201)
+end note
+
+palvelin-->selain: HTTP 201
