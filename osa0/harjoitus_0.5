@@ -1,0 +1,37 @@
+# Sekvenssikaavio: https://www.websequencediagrams.com/
+#
+# FullStack - Harjoitus 0.5
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+palvelin-->selain: HTML-koodi
+
+note over selain
+Selain löytää HTML-koodista viittauksen main.css -tiedostoon
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+palvelin-->selain: main.css
+
+note over selain
+Selain löytää HTML-koodista viittauksen spa.js -tiedostoon
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+palvelin-->selain: spa.js
+
+note over selain
+Selain alkaa suorittaa JavaScript-koodia,
+joka pyytä JSON-datan palvelimelta.
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+palvelin-->selain: data.json
+
+note over selain
+Selain suorittaa tapahtumakäsittelijän JavaScript
+-koodin, joka renderöi JSON-datan luettavaan muotoon.
+end note
+
+
+
+
