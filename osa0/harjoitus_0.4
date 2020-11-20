@@ -6,8 +6,16 @@ selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
 palvelin-->selain: Redirect to: /exampleapp/notes
 selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
 palvelin-->selain: HTML-koodi
+
+note over selain
+Selain löytää HTML-koodista viittauksen main.css -tiedostoon
+end note
 selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes/main.css
 palvelin-->selain: main.css
+
+note over selain
+Selain löytää HTML-koodista viittauksen main.js -tiedostoon
+end note
 selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes/main.js
 palvelin-->selain: main.js
 
