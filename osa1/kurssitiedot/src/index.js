@@ -32,14 +32,14 @@ const App = () => {
     <div>
       <Header course={course} />
       <Content
-        part1={part[0].name} exercises1={part[0].exercises}
-        part2={part[1].name} exercises2={part[1].exercises}
-        part3={part[2].name} exercises3={part[2].exercises}  
+        part1={parts[0].name} exercises1={parts[0].exercises}
+        part2={parts[1].name} exercises2={parts[1].exercises}
+        part3={parts[2].name} exercises3={parts[2].exercises}  
       />  
       <Total
-        exercises1={part[0].exercises}
-        exercises2={part[1].exercises}
-        exercises3={part[2].exercises}
+        exercises1={parts[0].exercises}
+        exercises2={parts[1].exercises}
+        exercises3={parts[2].exercises}
       />
     </div>
   )
