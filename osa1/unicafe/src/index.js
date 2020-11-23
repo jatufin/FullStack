@@ -43,19 +43,28 @@ const Statistics = ({good, neutral, bad}) => {
         console.log("Invalid statistics type")
     }
   }
+  if (statAll() === 0) {
+    return(
+      <div>
+        <h1>statistics</h1>
 
-  return(
-    <div>
-      <h1>statistics</h1>
+        <p>No feedback given</p>
+      </div>
+    )
+  } else {
+      return(
+        <div>
+          <h1>statistics</h1>
 
-      <Stats text="good" statFunction={statFunctionCreator("goods")} />
-      <Stats text="neutral" statFunction={statFunctionCreator("neutrals")} />
-      <Stats text="bad" statFunction={statFunctionCreator("bads")} />
-      <Stats text="all" statFunction={statFunctionCreator("all")} />
-      <Stats text="average" statFunction={statFunctionCreator("average")} />
-      <Stats text="positive" statFunction={statFunctionCreator("positives")} suffix="%" />
-    </div>
-  )
+          <Stats text="good" statFunction={statFunctionCreator("goods")} />
+          <Stats text="neutral" statFunction={statFunctionCreator("neutrals")} />
+          <Stats text="bad" statFunction={statFunctionCreator("bads")} />
+          <Stats text="all" statFunction={statFunctionCreator("all")} />
+          <Stats text="average" statFunction={statFunctionCreator("average")} />
+          <Stats text="positive" statFunction={statFunctionCreator("positives")} suffix="%" />
+        </div>
+      )
+  }
 }
 
 const App = () => {
