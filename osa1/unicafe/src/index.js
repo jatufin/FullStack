@@ -17,29 +17,7 @@ const Stats = ({statFunction, text, suffix}) => {
   )
 }
 
-
-const App = () => {
-  // tallenna napit omaan tilaansa
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
-
-  const feedback = (feedbackType) => () => {
-    switch (feedbackType) {
-      case "good":
-          setGood(good + 1)
-          break
-      case "neutral":
-          setNeutral(neutral + 1)
-          break
-      case "bad":
-          setBad(bad + 1)
-          break
-      default:
-          console.log("Unknown feedback type")
-    }
-  }
-
+const Statistics = ({good, neutral, bad}) => {
   const statAll = () => {
     return good + neutral + bad
   }
@@ -66,14 +44,8 @@ const App = () => {
     }
   }
 
-  return (
+  return(
     <div>
-      <h1>give feedback</h1>
-
-      <FeedbackButton onClick={feedback("good")} text="good" />
-      <FeedbackButton onClick={feedback("neutral")} text="neutral" />
-      <FeedbackButton onClick={feedback("bad")} text="bad" />
-
       <h1>statistics</h1>
 
       <Stats text="good" statFunction={statFunctionCreator("goods")} />
@@ -82,6 +54,41 @@ const App = () => {
       <Stats text="all" statFunction={statFunctionCreator("all")} />
       <Stats text="average" statFunction={statFunctionCreator("average")} />
       <Stats text="positive" statFunction={statFunctionCreator("positives")} suffix="%" />
+    </div>
+  )
+}
+
+const App = () => {
+  // tallenna napit omaan tilaansa
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+
+  const feedback = (feedbackType) => () => {
+    switch (feedbackType) {
+      case "good":
+          setGood(good + 1)
+          break
+      case "neutral":
+          setNeutral(neutral + 1)
+          break
+      case "bad":
+          setBad(bad + 1)
+          break
+      default:
+          console.log("Unknown feedback type")
+    }
+  }
+
+  return (
+    <div>
+      <h1>give feedback</h1>
+
+      <FeedbackButton onClick={feedback("good")} text="good" />
+      <FeedbackButton onClick={feedback("neutral")} text="neutral" />
+      <FeedbackButton onClick={feedback("bad")} text="bad" />
+
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
