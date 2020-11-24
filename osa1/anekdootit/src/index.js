@@ -32,13 +32,13 @@ const App = (props) => {
   const [votes, setVotes] = useState([])
 
   const initVotes = () => {
-    if(votes.length === anecdotes.length) {
+    if(votes.length === props.anecdotes.length) {
       return
     }
 
-    let a = new Array(anecdotes.length)
+    let a = new Array(props.anecdotes.length)
 
-    for(let i=0;i<anecdotes.length;i++) {
+    for(let i=0;i<props.anecdotes.length;i++) {
       a[i] = 0
     }
 
@@ -46,7 +46,7 @@ const App = (props) => {
   }
 
   const randomAnecdote = () => {
-    const n = Math.floor((Math.random() * anecdotes.length))
+    const n = Math.floor((Math.random() * props.anecdotes.length))
     setSelected(n)
   }
 
