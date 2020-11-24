@@ -11,9 +11,9 @@ const FeedbackButton = ({onClick, text}) => {
 
 const StatisticLine = ({statFunction, text, suffix}) => {
   return(
-    <p>
-      {text} {statFunction()} {suffix}
-    </p>
+    <tr>
+      <td>{text}</td><td>{statFunction()} {suffix}</td>
+    </tr>
   )
 }
 
@@ -52,12 +52,16 @@ const Statistics = ({good, neutral, bad}) => {
   } else {
       return(
         <div>
-          <StatisticLine text="good" statFunction={statFunctionCreator("goods")} />
-          <StatisticLine text="neutral" statFunction={statFunctionCreator("neutrals")} />
-          <StatisticLine text="bad" statFunction={statFunctionCreator("bads")} />
-          <StatisticLine text="all" statFunction={statFunctionCreator("all")} />
-          <StatisticLine text="average" statFunction={statFunctionCreator("average")} />
-          <StatisticLine text="positive" statFunction={statFunctionCreator("positives")} suffix="%" />
+          <table>
+            <tbody>
+              <StatisticLine text="good" statFunction={statFunctionCreator("goods")} />
+              <StatisticLine text="neutral" statFunction={statFunctionCreator("neutrals")} />
+              <StatisticLine text="bad" statFunction={statFunctionCreator("bads")} />
+              <StatisticLine text="all" statFunction={statFunctionCreator("all")} />
+              <StatisticLine text="average" statFunction={statFunctionCreator("average")} />
+              <StatisticLine text="positive" statFunction={statFunctionCreator("positives")} suffix="%" />
+            </tbody>
+          </table>
         </div>
       )
   }
