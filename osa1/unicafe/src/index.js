@@ -9,7 +9,7 @@ const FeedbackButton = ({onClick, text}) => {
   )
 }
 
-const Stats = ({statFunction, text, suffix}) => {
+const StatisticLine = ({statFunction, text, suffix}) => {
   return(
     <p>
       {text} {statFunction()} {suffix}
@@ -46,22 +46,18 @@ const Statistics = ({good, neutral, bad}) => {
   if (statAll() === 0) {
     return(
       <div>
-        <h1>statistics</h1>
-
         <p>No feedback given</p>
       </div>
     )
   } else {
       return(
         <div>
-          <h1>statistics</h1>
-
-          <Stats text="good" statFunction={statFunctionCreator("goods")} />
-          <Stats text="neutral" statFunction={statFunctionCreator("neutrals")} />
-          <Stats text="bad" statFunction={statFunctionCreator("bads")} />
-          <Stats text="all" statFunction={statFunctionCreator("all")} />
-          <Stats text="average" statFunction={statFunctionCreator("average")} />
-          <Stats text="positive" statFunction={statFunctionCreator("positives")} suffix="%" />
+          <StatisticLine text="good" statFunction={statFunctionCreator("goods")} />
+          <StatisticLine text="neutral" statFunction={statFunctionCreator("neutrals")} />
+          <StatisticLine text="bad" statFunction={statFunctionCreator("bads")} />
+          <StatisticLine text="all" statFunction={statFunctionCreator("all")} />
+          <StatisticLine text="average" statFunction={statFunctionCreator("average")} />
+          <StatisticLine text="positive" statFunction={statFunctionCreator("positives")} suffix="%" />
         </div>
       )
   }
@@ -97,6 +93,7 @@ const App = () => {
       <FeedbackButton onClick={feedback("neutral")} text="neutral" />
       <FeedbackButton onClick={feedback("bad")} text="bad" />
 
+      <h1>statistics</h1>
       <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   )
