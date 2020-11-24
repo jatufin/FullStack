@@ -10,9 +10,12 @@ const MostVoted = ({votes, anecdotes}) => {
     }
   }
 
-  // If no votes has been cast, show nothing
   if (votes[n] === 0) {
-    return (<div></div>)
+    return (
+      <div>
+        <h2>No votes have been cast.</h2>
+      </div>
+    )
   }
 
   return(
@@ -51,8 +54,6 @@ const App = (props) => {
     let v = [...votes]
     v[selected]++
     setVotes(v)
-
-    console.log(v)
   }
 
   initVotes()
