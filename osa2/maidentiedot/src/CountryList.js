@@ -1,8 +1,10 @@
+import Weather from './Weather'
+
 const CountryList = ({countries, selectAction}) => {
     const selectCountry = (countryName) => {
       return () => selectAction(countryName)
     }
-    
+
     if(countries.length === 0) {
       return(
         <div>
@@ -50,6 +52,7 @@ const CountryList = ({countries, selectAction}) => {
               )}
             </ul>
           <img src={country.flag} alt="flag" width="150" />
+          <Weather city={country.capital} country={country.alpha2Code} />
       </div>
     )
   }
