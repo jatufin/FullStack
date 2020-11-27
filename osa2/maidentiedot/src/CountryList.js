@@ -1,4 +1,8 @@
-const CountryList = ({countries}) => {
+const CountryList = ({countries, selectAction}) => {
+    const selectCountry = (countryName) => {
+      return () => selectAction(countryName)
+    }
+    
     if(countries.length === 0) {
       return(
         <div>
@@ -18,7 +22,9 @@ const CountryList = ({countries}) => {
       return(
         <div>
           {countries.map(country =>
-            <p key={country.alpha3Code}>{country.name}</p>
+            <p key={country.alpha3Code}>{country.name}
+              <button onClick={selectCountry(country.name)}>show</button>
+            </p>
           )}
         </div>
       )

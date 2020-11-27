@@ -24,8 +24,14 @@ const App = () => {
   
   return (
     <div>
-      <input value={filter} onChange={filterChange} />
-      <CountryList countries={filteredCountries} />
+      <input
+        value={filter}
+        onChange={filterChange}
+      />
+      <CountryList
+        countries={filteredCountries}
+        selectAction={setFilter}
+      />
     </div>
   )
 }
