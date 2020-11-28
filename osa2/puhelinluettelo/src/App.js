@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import personsService from './services/persons'
 
 const Filter = (props) => {
@@ -24,11 +23,20 @@ const PersonForm = (props) => {
     )
 }
 
-const PersonList = ({ persons }) => {
+const PersonList = ({ persons, deletePerson }) => {
+    const deleteHandler = (person) => {
+        return () => {
+            deletePerson(person.id)
+        }
+    }
+
     return (
         <div>
             {persons.map(person =>
-                <p key={person.name}>{person.name} {person.number}</p>
+                <p key={person.name}>
+                    {person.name} {person.number}
+                    <button onClick={deleteHandler(person)}>Delete</button>
+                </p>
             )}
         </div>
     )
@@ -67,10 +75,18 @@ const App = () => {
         }
 
         personsService
-            .create(newPerson)
+            .createPerson(newPerson)
             .then(returnedPerson => {
                 setPersons(persons.concat(returnedPerson))
             })
+    }
+
+    const deletePerson = (id) => {
+        personsService
+            .deletePerson(id)
+            .then(resData =>
+               setPersons(persons.filter(person => person.id !== id))
+            )
     }
 
     const handleNameChange = (event) => {
@@ -101,7 +117,7 @@ const App = () => {
                 numberChangeHandler={handleNumberChange}
             />
             <h2>Numbers</h2>
-            <PersonList
+            <PersonList deletePerson={deletePerson}
                 persons={filteredPersons}
             />
         </div>
