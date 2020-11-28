@@ -17,10 +17,19 @@ const deletePerson = id => {
     return request.then(response => response.data)
 }
 
+const updateNumber = (id, number) => {
+    const request = axios.patch(
+        `${baseUrl}/${id}`,
+        { number: number }
+    )
+    return request.then(response => response.data)
+}
+
 const personsService = {
     getAll,
     createPerson,
-    deletePerson
+    deletePerson,
+    updateNumber
 }
 
 export default personsService

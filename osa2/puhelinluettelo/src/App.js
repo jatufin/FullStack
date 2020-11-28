@@ -33,8 +33,8 @@ const PersonList = ({ persons, deletePerson }) => {
     return (
         <div>
             {persons.map(person =>
-                <p key={person.name}>
-                    {person.name} {person.number}
+                <p key={person.id}>
+                    {person.id} {person.name} {person.number}
                     <button onClick={deleteHandler(person)}>Delete</button>
                 </p>
             )}
@@ -65,7 +65,31 @@ const App = () => {
         event.preventDefault()
 
         if (persons.some(person => person.name === newName)) {
-            alert(`${newName} is already added to phonebook`)
+            const updatedPerson = persons.filter(person => person.name === newName)[0]
+            
+            if(updatedPerson.number === newNumber) {
+                alert(`${newName} is already added to phonebook`)
+                return
+            }
+
+            const c = window.confirm(
+                `${newName} is already added to phonebook, replace the old number with a new one?`
+            )
+
+            if(c === false) {
+                return
+            }
+            
+            personsService
+                .updateNumber(updatedPerson.id, newNumber)
+                .then(returnedPerson => {
+                    setPersons(
+                        persons.map(person => person.id !== returnedPerson.id
+                            ? person
+                            : { ...person, number: returnedPerson.number }
+                    ))
+                })
+
             return
         }
 
