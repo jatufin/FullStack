@@ -48,6 +48,7 @@ const App = () => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [nameFilter, setNameFilter] = useState('')
+    const [notification, setNotification] = useState({ message: '', type: 'normal'})
 
     const filteredPersons = persons.filter(person =>
         person.name.toUpperCase().includes(nameFilter.toUpperCase())
@@ -64,11 +65,18 @@ const App = () => {
     const addName = (event) => {
         event.preventDefault()
 
+        if(newName === '') {
+            return
+        }
+
         if (persons.some(person => person.name === newName)) {
             const updatedPerson = persons.filter(person => person.name === newName)[0]
             
             if(updatedPerson.number === newNumber) {
-                alert(`${newName} is already added to phonebook`)
+                showNotification(
+                    `${newName} is already added to phonebook`,
+                    'error'
+                )
                 return
             }
 
@@ -88,6 +96,7 @@ const App = () => {
                             ? person
                             : { ...person, number: returnedPerson.number }
                     ))
+                    showNotification(`${updatedPerson.name} was updated`, 'normal')
                 })
 
             return
@@ -102,15 +111,18 @@ const App = () => {
             .createPerson(newPerson)
             .then(returnedPerson => {
                 setPersons(persons.concat(returnedPerson))
+                showNotification(`Added ${returnedPerson.name}`, 'normal')
             })
     }
 
     const deletePerson = (id) => {
         personsService
             .deletePerson(id)
-            .then(resData =>
-               setPersons(persons.filter(person => person.id !== id))
-            )
+            .then(resData => {
+                const name = getNameByID(id)
+                setPersons(persons.filter(person => person.id !== id))
+                showNotification(`${name} was deleted`, 'normal')
+            })
     }
 
     const handleNameChange = (event) => {
@@ -125,9 +137,28 @@ const App = () => {
         setNameFilter(event.target.value)
     }
 
+    const showNotification = (message, type) => {
+        setNotification({ message: message, type: type })
+
+        setTimeout(
+            () => { setNotification(null) },
+            3000
+        )
+    }
+
+    const getNameByID = id => {
+        const tmp = persons.filter(person => person.id === id)
+        const name = tmp.length === 1
+                    ? tmp[0].name
+                    : "<not found>"
+        
+        return name
+    } 
+
     return (
         <div>
             <h1>Phonebook</h1>
+            <Notification notification={notification} />
             <Filter
                 nameFilter={nameFilter}
                 changeHandler={handleFilterChange}
@@ -147,6 +178,35 @@ const App = () => {
         </div>
     )
 
+}
+
+const Notification = ({notification}) => {
+    if(notification === null) {
+        return null
+    }
+
+    if(notification.message === '') {
+        return null
+    }
+
+    const style = {
+        bacground: 'lighgrey',
+        borderStyle: 'solid',
+        borderRadius: 5,
+        fontSize: 20,
+    }
+
+    if(notification.type === 'error') {
+        style.color = 'red'
+    } else {
+        style.color = 'green'
+    }
+
+    return (
+        <div style={style}>
+            {notification.message}
+        </div>
+    )
 }
 
 export default App
