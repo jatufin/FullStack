@@ -34,7 +34,7 @@ const PersonList = ({ persons, deletePerson }) => {
         <div>
             {persons.map(person =>
                 <p key={person.id}>
-                    {person.id} {person.name} {person.number}
+                    {person.name} {person.number}
                     <button onClick={deleteHandler(person)}>Delete</button>
                 </p>
             )}
