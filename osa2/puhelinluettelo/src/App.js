@@ -98,6 +98,12 @@ const App = () => {
                     ))
                     showNotification(`${updatedPerson.name} was updated`, 'normal')
                 })
+                .catch(error => {
+                    setPersons(
+                        persons.filter(person => person.name !== newName)
+                    )
+                    showNotification(`Information of ${newName} has already been removed from server`, 'error')
+                })
 
             return
         }
@@ -116,13 +122,18 @@ const App = () => {
     }
 
     const deletePerson = (id) => {
+        const name = getNameByID(id)
+        
         personsService
             .deletePerson(id)
             .then(resData => {
-                const name = getNameByID(id)
-                setPersons(persons.filter(person => person.id !== id))
                 showNotification(`${name} was deleted`, 'normal')
             })
+            .catch(error => {
+                showNotification(`Information of ${name} has already been removed from server`, 'error')
+            })
+
+        setPersons(persons.filter(person => person.id !== id))
     }
 
     const handleNameChange = (event) => {
@@ -190,7 +201,7 @@ const Notification = ({notification}) => {
     }
 
     const style = {
-        bacground: 'lighgrey',
+        background: 'lightgrey',
         borderStyle: 'solid',
         borderRadius: 5,
         fontSize: 20,
