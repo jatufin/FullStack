@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../../osa1/unicafe"
+		},
+		{
+			"path": "../.."
 		}
 	],
 	"settings": {}
