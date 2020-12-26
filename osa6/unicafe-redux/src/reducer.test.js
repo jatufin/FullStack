@@ -22,7 +22,7 @@ describe('unicafe reducer', () => {
 
     deepFreeze(state)
     const newState = counterReducer(state, action)
-    
+
     expect(newState).toEqual({
       good: 1,
       ok: 0,
@@ -55,5 +55,18 @@ describe('unicafe reducer', () => {
       ok: 0,
       bad: 1
     })
+  })
+
+  test('zero clears stats', () => {
+    const action = { type: 'ZERO' }
+    const state = {
+      good: 5,
+      ok: 10,
+      bad: 20
+    }
+
+    deepFreeze(state)
+    const newState = counterReducer(state, action)
+    expect(newState).toEqual(initialState)
   })
 })
