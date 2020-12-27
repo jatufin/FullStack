@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { voteAnecdote } from '../reducers/anecdoteReducer'
+import { voteUpAnecdote } from '../reducers/anecdoteReducer'
 import { setNotification, clearNotification } from '../reducers/notificationReducer'
 
 const AnecdoteList = () => {
@@ -10,7 +10,7 @@ const AnecdoteList = () => {
       state.anecdotes.filter(a =>
         a.content.toUpperCase().includes(
           state.filter.toUpperCase()))
-          
+
     const sortedAnecdotes =
       filteredAnecdotes.sort(
         (a, b) => b.votes - a.votes)
@@ -23,7 +23,7 @@ const AnecdoteList = () => {
   const vote = (anecdote) => {
     console.log('vote', anecdote.id)
 
-    dispatch(voteAnecdote(anecdote.id))
+    dispatch(voteUpAnecdote(anecdote))
 
     dispatch(setNotification(`you voted '${anecdote.content}'`))
     setTimeout(() => dispatch(clearNotification()), 5000)
