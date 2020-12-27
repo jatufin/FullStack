@@ -21,8 +21,8 @@ const NewAnecdote = () => {
   )
 }
 
-const App = () => {
-  const anecdotes = useSelector(state => state)
+const Anecdotes = () => {
+  const anecdotes = useSelector(state => state.sort((a, b) => b.votes - a.votes))
   const dispatch = useDispatch()
 
   const vote = (id) => {
@@ -31,9 +31,8 @@ const App = () => {
     dispatch(voteAnecdote(id))
   }
 
-  return (
+  return(
     <div>
-      <h2>Anecdotes</h2>
       {anecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
@@ -45,6 +44,15 @@ const App = () => {
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+const App = () => {
+  return (
+    <div>
+      <h2>Anecdotes</h2>
+      <Anecdotes />
       <h2>create new</h2>
       <NewAnecdote />
     </div>
