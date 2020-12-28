@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { voteUpAnecdote } from '../reducers/anecdoteReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
-const mapSTateToProps = (state) => {
+const mapStateToProps = (state) => {
   const filteredAnecdotes =
       state.anecdotes.filter(a =>
         a.content.toUpperCase().includes(
@@ -46,4 +46,4 @@ const AnecdoteList = (props) => {
   )
 }
 
-export default connect(mapSTateToProps, mapDispatchToProps)(AnecdoteList)
+export default connect(mapStateToProps, mapDispatchToProps)(AnecdoteList)
