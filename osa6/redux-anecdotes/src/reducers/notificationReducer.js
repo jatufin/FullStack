@@ -1,15 +1,29 @@
 const notificationAtStart = ''
 
-export const setNotification = (message) => {
-  return {
-    type: 'SET_NOTIFICATION',
-    data: message
+export const showNotification = (message) => {
+  return async dispatch => {
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      data: message
+    })
   }
 }
 
 export const clearNotification = () => {
-  return {
-    type: 'CLEAR_NOTIFICATION'
+  return async dispatch => {
+    dispatch({
+      type: 'CLEAR_NOTIFICATION'
+    })
+  }
+}
+
+export const setNotification = (message, seconds) => {
+  return async dispatch => {
+    dispatch(showNotification(message))
+    setTimeout(() => {
+      dispatch(clearNotification())
+    }, seconds * 1000)
+    console.log('notification hidden')
   }
 }
 
