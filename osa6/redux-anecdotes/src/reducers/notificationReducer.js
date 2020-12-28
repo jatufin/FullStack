@@ -1,13 +1,4 @@
-const notificationAtStart = ''
-
-export const showNotification = (message) => {
-  return async dispatch => {
-    dispatch({
-      type: 'SET_NOTIFICATION',
-      data: message
-    })
-  }
-}
+const notificationAtStart = { message: '', timeoutId: null }
 
 export const clearNotification = () => {
   return async dispatch => {
@@ -19,20 +10,30 @@ export const clearNotification = () => {
 
 export const setNotification = (message, seconds) => {
   return async dispatch => {
-    dispatch(showNotification(message))
-    setTimeout(() => {
+
+    const timeoutId = setTimeout(() => {
       dispatch(clearNotification())
     }, seconds * 1000)
-    console.log('notification hidden')
+
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      data: { message, timeoutId }
+    })
   }
 }
 
 const notificationReducer = (state = notificationAtStart, action) => {
   switch (action.type) {
+
     case 'SET_NOTIFICATION':
+      if(state.timeoutId) {
+        clearTimeout(state.timeoutId)
+      }
       return action.data
+
     case 'CLEAR_NOTIFICATION':
-      return ''
+      return { message: '', timeoutId: null }
+
     default:
       return state
   }
