@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "BlogListBackEnd"
+		},
+		{
+			"path": "../../osa5/bloglist/BlogListFrontEnd"
+		}
+	],
+	"settings": {}
+}
