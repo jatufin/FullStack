@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "routed-anecdotes"
+		},
+		{
+			"path": "country-hook"
 		}
 	],
 	"settings": {}
