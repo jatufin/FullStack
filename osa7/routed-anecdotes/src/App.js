@@ -85,11 +85,6 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  /*
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
-  */
 
   const content = useField('text')
   const author = useField('text')
@@ -124,15 +119,15 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit} name='anecdote-form'>
         <div>
           content
-          <input {...content} />
+          <input { ...content } reset='' />
         </div>
         <div>
           author
-          <input {...author} />
+          <input {...author} reset='' />
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <input {...info} reset='' />
         </div>
         <button>create</button>
         <button onClick={resetAnecdoteForm}>reset</button>
