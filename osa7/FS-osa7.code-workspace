@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "country-hook"
+		},
+		{
+			"path": "ultimate-hooks"
 		}
 	],
 	"settings": {}
