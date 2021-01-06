@@ -5,7 +5,12 @@ import React, { useState, useEffect, useRef } from 'react'
 import Blogs from './components/Blogs'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
-import Notification from './components/Notification'
+
+// import Notification from './components/Notification'
+
+import { useDispatch } from 'react-redux'
+import ReduxNotification from './components/ReduxNotification'
+import { setReduxNotification } from './reducers/notificationReducer'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -17,10 +22,14 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
+  /*
   const [notification, setNotification] = useState('')
   const [notificationType, setNotificationType] = useState('')
+  */
 
   const blogFormRef = useRef()
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -38,8 +47,7 @@ const App = () => {
     }
   }, [])
 
-
-
+  /*
   const showNotification = (message, type) => {
     setNotification(message)
     setNotificationType(type ? type : 'normal')
@@ -48,6 +56,7 @@ const App = () => {
       setNotification('')
     }, Config.NOTIFICATION_TIMEOUT)
   }
+  */
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -66,7 +75,11 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch(error) {
-      showNotification('wrong username or password', 'error')
+      dispatch(setReduxNotification(
+        'wrong username or password',
+        5,
+        'error'
+      ))
     }
   }
 
@@ -88,15 +101,22 @@ const App = () => {
 
       setBlogs(blogs.concat(addedBlog))
 
+      /*
       showNotification(
         `a new blog ${addedBlog.title} by ${addedBlog.author} added`,
         'normal'
       )
+      */
+      dispatch(setReduxNotification(
+        `a new blog ${addedBlog.title} by ${addedBlog.author} added`,
+        5
+      ))
     } catch(error) {
-      showNotification(
+      dispatch(setReduxNotification(
         `Failed to add blog: ${error.message}`,
+        5,
         'error'
-      )
+      ))
     }
   }
 
@@ -123,19 +143,20 @@ const App = () => {
 
       setBlogs(blogs.filter(b => b.id !== blogObject.id))
 
-      showNotification('blog removed')
+      dispatch(setReduxNotification('blog removed', 5))
     } catch(error) {
-      showNotification(
+      dispatch(setReduxNotification(
         `Failed to remove blog: ${error.message}`,
+        5,
         'error'
-      )
+      ))
     }
   }
 
   const loginPage = () => (
     <div>
       <h2>log in to application</h2>
-      <Notification message={notification} type={notificationType}/>
+      <ReduxNotification />
       <form onSubmit={handleLogin}>
         <p><input
           id='username'
@@ -155,7 +176,7 @@ const App = () => {
   const blogsPage = () => (
     <div>
       <h2>blogs</h2>
-      <Notification message={notification} type={notificationType}/>
+      <ReduxNotification />
       <p>{user.name} logged in
         <button id='logout-button' onClick={() => {handleLogout()}}>logout</button>
       </p>

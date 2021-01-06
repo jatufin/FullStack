@@ -4,4 +4,27 @@ import App from './App'
 
 import './index.css'
 
-ReactDOM.render(<App />, document.getElementById('root'))
+import { createStore, combineReducers, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+import { composeWithDevTools } from 'redux-devtools-extension'
+import { Provider } from 'react-redux'
+
+import notificationReducer from './reducers/notificationReducer'
+
+const reducer = combineReducers({
+  notification: notificationReducer
+})
+
+const store = createStore(
+  reducer,
+  composeWithDevTools(
+    applyMiddleware(thunk)
+  )
+)
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)
