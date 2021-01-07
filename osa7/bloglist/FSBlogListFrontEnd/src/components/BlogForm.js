@@ -8,6 +8,7 @@ const BlogForm = ({ addBlog }) => {
 
   const handleNewBlog = (event) => {
     event.preventDefault()
+    console.log('HANDLE NEW BLOG')
 
     const blogObject = {
       title,
@@ -15,6 +16,7 @@ const BlogForm = ({ addBlog }) => {
       url
     }
 
+    console.log('BLOGOBJECT: ', blogObject)
     addBlog(blogObject)
 
     setTitle('')

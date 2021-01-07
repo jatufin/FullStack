@@ -8,34 +8,30 @@ import Togglable from './components/Togglable'
 
 // import Notification from './components/Notification'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ReduxNotification from './components/ReduxNotification'
 import { setReduxNotification } from './reducers/notificationReducer'
+import { initBlogs, createBlog } from './reducers/blogReducer'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  // const [blogs, setBlogs] = useState([])
+  const dispatch = useDispatch()
+  const blogs = useSelector(state => state.blog)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
-  /*
-  const [notification, setNotification] = useState('')
-  const [notificationType, setNotificationType] = useState('')
-  */
-
   const blogFormRef = useRef()
 
-  const dispatch = useDispatch()
+  
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
-  }, [])
+    dispatch(initBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     const userJSON = window.localStorage.getItem(Config.STORAGE_KEY)
@@ -46,17 +42,6 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
-
-  /*
-  const showNotification = (message, type) => {
-    setNotification(message)
-    setNotificationType(type ? type : 'normal')
-
-    setTimeout(() => {
-      setNotification('')
-    }, Config.NOTIFICATION_TIMEOUT)
-  }
-  */
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -91,37 +76,12 @@ const App = () => {
 
   const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
-
-    try {
-      const addedBlog = await blogService.create(blogObject)
-      addedBlog.user = {
-        username: user.username,
-        name: user.name
-      }
-
-      setBlogs(blogs.concat(addedBlog))
-
-      /*
-      showNotification(
-        `a new blog ${addedBlog.title} by ${addedBlog.author} added`,
-        'normal'
-      )
-      */
-      dispatch(setReduxNotification(
-        `a new blog ${addedBlog.title} by ${addedBlog.author} added`,
-        5
-      ))
-    } catch(error) {
-      dispatch(setReduxNotification(
-        `Failed to add blog: ${error.message}`,
-        5,
-        'error'
-      ))
-    }
+    dispatch(createBlog(blogObject))
   }
 
-  const updateBlog = async (blogObject) => {
-    const updatedBlog = await blogService.update(blogObject)
+  
+  const updateBlog = async (blogObject) => { }
+  /*  const updatedBlog = await blogService.update(blogObject)
     updatedBlog.user = {
       username: blogObject.user.username,
       name: blogObject.user.name
@@ -132,9 +92,10 @@ const App = () => {
         ? b
         : updatedBlog))
   }
+  */
 
-  const removeBlog = async (blogObject) => {
-    if(!window.confirm(`remove ${blogObject.title} by ${blogObject.author}`)) {
+  const removeBlog = async (blogObject) => { }
+  /*  if(!window.confirm(`remove ${blogObject.title} by ${blogObject.author}`)) {
       return
     }
 
@@ -152,6 +113,7 @@ const App = () => {
       ))
     }
   }
+  */
 
   const loginPage = () => (
     <div>

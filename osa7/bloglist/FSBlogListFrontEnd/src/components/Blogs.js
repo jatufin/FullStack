@@ -4,6 +4,10 @@ import PropTypes from 'prop-types'
 import Blog from './Blog'
 
 const Blogs = ({ blogs, updateBlog, currentUser, removeBlog }) => {
+  if(!blogs) {
+    return null
+  }
+  
   const blogSorter = (blogList) => {
     const listToSort = [...blogList]
 
