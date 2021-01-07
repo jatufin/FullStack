@@ -1,5 +1,3 @@
-import Config from './config'
-
 import React, { useState, useEffect, useRef } from 'react'
 
 import Blogs from './components/Blogs'
@@ -10,73 +8,43 @@ import Togglable from './components/Togglable'
 
 import { useDispatch, useSelector } from 'react-redux'
 import ReduxNotification from './components/ReduxNotification'
-import { setReduxNotification } from './reducers/notificationReducer'
 import { initBlogs, createBlog, updateBlog, deleteBlog } from './reducers/blogReducer'
-
-import blogService from './services/blogs'
-import loginService from './services/login'
+import { returnSession, loginUser, logoutUser} from './reducers/userReducer'
 
 const App = () => {
-  // const [blogs, setBlogs] = useState([])
   const dispatch = useDispatch()
   const blogs = useSelector(state => state.blog)
+  const user = useSelector(state => state.user)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
 
   const blogFormRef = useRef()
 
-  
-
   useEffect(() => {
     dispatch(initBlogs())
+    dispatch(returnSession())
   }, [dispatch])
-
-  useEffect(() => {
-    const userJSON = window.localStorage.getItem(Config.STORAGE_KEY)
-
-    if(userJSON) {
-      const user = JSON.parse(userJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault()
 
-    try {
-      const user = await loginService.login({ username, password })
-      console.log('Talletaan avaimella', Config.STORAGE_KEY)
-
-      window.localStorage.setItem(
-        Config.STORAGE_KEY,
-        JSON.stringify(user)
-      )
-
-      blogService.setToken(user.token)
-      setUser(user)
-      setUsername('')
-      setPassword('')
-    } catch(error) {
-      dispatch(setReduxNotification(
-        'wrong username or password',
-        5,
-        'error'
-      ))
-    }
+    dispatch(loginUser(username, password))
+    setUsername('')
+    setPassword('')
   }
 
   const handleLogout = async () => {
-    window.localStorage.clear()
-    setUser(null)
-    blogService.setToken(null)
+
+    dispatch(logoutUser())
+
   }
 
   const addBlog = async (blogObject) => {
+
     blogFormRef.current.toggleVisibility()
     dispatch(createBlog(blogObject, user))
+
   }
 
   
@@ -85,7 +53,6 @@ const App = () => {
     dispatch(updateBlog(blogObject))
 
   }
-  
 
   const removeBlog = async (blogObject) => {
     if(!window.confirm(`remove ${blogObject.title} by ${blogObject.author}`)) {
@@ -94,22 +61,6 @@ const App = () => {
 
     dispatch(deleteBlog(blogObject))
   }
-    /*
-    try {
-      await blogService.remove(blogObject, user.token)
-
-      setBlogs(blogs.filter(b => b.id !== blogObject.id))
-
-      dispatch(setReduxNotification('blog removed', 5))
-    } catch(error) {
-      dispatch(setReduxNotification(
-        `Failed to remove blog: ${error.message}`,
-        5,
-        'error'
-      ))
-    }
-  }
-  */
 
   const loginPage = () => (
     <div>
