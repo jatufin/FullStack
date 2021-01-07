@@ -24,7 +24,7 @@ const create = async newObject => {
 
 const update = async updatedObject => {
   const url = `${baseUrl}/${updatedObject.id}`
-
+  
   const objectToSend = {
     title: updatedObject.title,
     author: updatedObject.author,

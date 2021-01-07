@@ -1,10 +1,34 @@
 import blogService from '../services/blogs'
 import { setReduxNotification } from './notificationReducer'
 
-export const createBlog = (blogObject) => {
+export const initBlogs = () => {
+  return async dispatch => {
+    try {
+      const blogs = await blogService.getAll()
+
+      dispatch({
+        type: 'INIT_BLOGS',
+        data: blogs
+      })
+    } catch(error) {
+      dispatch(setReduxNotification(
+        `Error loading blogs: ${error.message}`,
+        5,
+        'error'
+      ))
+    }
+  }
+}
+
+export const createBlog = (blogObject, user) => {
   return async dispatch => {
     try {
       const newBlog = await blogService.create(blogObject)
+
+      newBlog.user = {
+        username: user.username,
+        name: user.name
+      }
 
       dispatch({
         type: 'ADD',
@@ -26,18 +50,46 @@ export const createBlog = (blogObject) => {
   }
 }
 
-export const initBlogs = () => {
+export const updateBlog = (blogObject) => {
   return async dispatch => {
     try {
-      const blogs = await blogService.getAll()
+      const updatedBlog = await blogService.update(blogObject)
+
+      updatedBlog.user = {
+        username: blogObject.user.username,
+        name: blogObject.user.name
+      }
 
       dispatch({
-        type: 'INIT_BLOGS',
-        data: blogs
+        type: 'UPDATE',
+        data: updatedBlog
       })
+
     } catch(error) {
       dispatch(setReduxNotification(
-        `Error loading blogs: ${error.message}`,
+        `Failed to update blog: ${error.message}`,
+        5,
+        'error'
+      ))
+    }
+  }
+}
+
+export const deleteBlog = (blogObject) => {
+  return async dispatch => {
+    try {
+      await blogService.remove(blogObject)
+
+      dispatch({
+        type: 'DELETE',
+        data: { id: blogObject.id }
+      })
+
+      dispatch(setReduxNotification('blog removed', 5))
+
+    } catch(error) {
+      dispatch(setReduxNotification(
+        `Failed to remove blog: ${error.message}`,
         5,
         'error'
       ))
@@ -51,6 +103,13 @@ const blogReducer = (state = [], action) => {
       return [...state, action.data]
     case 'INIT_BLOGS':
       return action.data
+    case 'UPDATE':
+      return state.map(blog => blog.id !== action.data.id
+        ? blog
+        : action.data
+      )
+    case 'DELETE':
+      return state.filter(blog => blog.id !== action.data.id)
     default:
       return state
   }

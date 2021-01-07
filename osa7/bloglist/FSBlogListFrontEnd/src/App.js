@@ -11,7 +11,7 @@ import Togglable from './components/Togglable'
 import { useDispatch, useSelector } from 'react-redux'
 import ReduxNotification from './components/ReduxNotification'
 import { setReduxNotification } from './reducers/notificationReducer'
-import { initBlogs, createBlog } from './reducers/blogReducer'
+import { initBlogs, createBlog, updateBlog, deleteBlog } from './reducers/blogReducer'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -76,29 +76,25 @@ const App = () => {
 
   const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
-    dispatch(createBlog(blogObject))
+    dispatch(createBlog(blogObject, user))
   }
 
   
-  const updateBlog = async (blogObject) => { }
-  /*  const updatedBlog = await blogService.update(blogObject)
-    updatedBlog.user = {
-      username: blogObject.user.username,
-      name: blogObject.user.name
-    }
+  const renewBlog = async (blogObject) => {
 
-    setBlogs(blogs.map(b =>
-      b.id !== updatedBlog.id
-        ? b
-        : updatedBlog))
+    dispatch(updateBlog(blogObject))
+
   }
-  */
+  
 
-  const removeBlog = async (blogObject) => { }
-  /*  if(!window.confirm(`remove ${blogObject.title} by ${blogObject.author}`)) {
+  const removeBlog = async (blogObject) => {
+    if(!window.confirm(`remove ${blogObject.title} by ${blogObject.author}`)) {
       return
     }
 
+    dispatch(deleteBlog(blogObject))
+  }
+    /*
     try {
       await blogService.remove(blogObject, user.token)
 
@@ -154,7 +150,7 @@ const App = () => {
 
       <Blogs
         blogs={blogs}
-        updateBlog={updateBlog}
+        updateBlog={renewBlog}
         removeBlog={removeBlog}
         currentUser={user}/>
     </div>
