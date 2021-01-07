@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
+import {
+  BrowserRouter as Router,
+  Switch, Route
+} from 'react-router-dom'
 
 import Blogs from './components/Blogs'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
+import Users from './components/Users'
 
 // import Notification from './components/Notification'
 
@@ -81,15 +86,17 @@ const App = () => {
       </form>
     </div>
   )
-
-  const blogsPage = () => (
+  
+  const CurrentUser = () => (
     <div>
-      <h2>blogs</h2>
-      <ReduxNotification />
       <p>{user.name} logged in
         <button id='logout-button' onClick={() => {handleLogout()}}>logout</button>
       </p>
-
+    </div>
+  )
+  
+  const BlogsPage = () => (
+    <div>
       <Togglable
         ref={blogFormRef}
         openButtonLabel='create new blog'
@@ -103,7 +110,27 @@ const App = () => {
         blogs={blogs}
         updateBlog={renewBlog}
         removeBlog={removeBlog}
-        currentUser={user}/>
+        currentUser={user} />
+    </div>
+  )
+
+  
+  const mainPage = () => (
+    <div>
+      <h2>blogs</h2>
+      <ReduxNotification />
+      <CurrentUser />
+
+      <Router>
+      <Switch>
+        <Route path ='/users'>
+          <Users />
+        </Route>
+        <Route path='/'>
+          <BlogsPage />
+        </Route>
+      </Switch>
+      </Router>
     </div>
   )
 
@@ -111,7 +138,7 @@ const App = () => {
     <div>
       { user === null
         ? loginPage()
-        : blogsPage()
+        : mainPage()
       }
     </div>
   )

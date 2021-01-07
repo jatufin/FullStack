@@ -18,7 +18,7 @@ export const returnSession = () => {
         data: user
       })
 
-      dispatch(setReduxNotification(`Logged in as: ${user.name}`, 5))
+      // dispatch(setReduxNotification(`Logged in as: ${user.name}`, 5))
     }
   }
 }
