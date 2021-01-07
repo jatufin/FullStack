@@ -89,9 +89,8 @@ const App = () => {
   
   const CurrentUser = () => (
     <div>
-      <p>{user.name} logged in
-        <button id='logout-button' onClick={() => {handleLogout()}}>logout</button>
-      </p>
+      <p>{user.name} logged in</p>
+      <button id='logout-button' onClick={() => {handleLogout()}}>logout</button>  
     </div>
   )
   
@@ -122,14 +121,14 @@ const App = () => {
       <CurrentUser />
 
       <Router>
-      <Switch>
-        <Route path ='/users'>
-          <Users />
-        </Route>
-        <Route path='/'>
-          <BlogsPage />
-        </Route>
-      </Switch>
+        <Switch>
+          <Route path ='/users'>
+            <Users />
+          </Route>
+          <Route path='/'>
+            <BlogsPage />
+          </Route>
+        </Switch>
       </Router>
     </div>
   )
