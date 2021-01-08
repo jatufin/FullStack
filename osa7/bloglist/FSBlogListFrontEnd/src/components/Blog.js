@@ -86,7 +86,7 @@ const Blog = ({ blog, update, remove, currentUser, showDetails }) => {
       </div>
       <div style={showWhenDetails} className='blog blogdetails'>
         <h2>{blog.title} {blog.author}</h2>
-        <p>{blog.url}</p>
+        <p><a href={blog.url}>{blog.url}</a></p>
         <p>likes {blog.likes ? blog.likes : 0} {likeButton()}</p>
         <p>Added by {blog.user.name}</p>
         <p>{deleteButton()}</p>
