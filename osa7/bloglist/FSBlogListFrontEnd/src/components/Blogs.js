@@ -20,6 +20,7 @@ const Blogs = ({ blogs, updateBlog, currentUser, removeBlog }) => {
     <div>
       {blogSorter(blogs).map(blog =>
         <Blog
+          showDetails={false}
           key={blog.id}
           blog={blog}
           update={updateBlog}

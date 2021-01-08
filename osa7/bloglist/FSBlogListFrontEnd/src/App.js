@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import {
   BrowserRouter as Router,
-  Switch, Route
+  Switch, Route, useRouteMatch
 } from 'react-router-dom'
 
+import Blog from './components/Blog'
 import Blogs from './components/Blogs'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
@@ -94,26 +95,46 @@ const App = () => {
     </div>
   )
   
-  const BlogsPage = () => (
-    <div>
-      <Togglable
-        ref={blogFormRef}
-        openButtonLabel='create new blog'
-        closeButtonLabel='cancel'
-      >
-        <h2>create new</h2>
-        <BlogForm addBlog={addBlog} />
-      </Togglable>
+  const BlogsPage = () => {
+    const match = useRouteMatch('/blogs/:id')
+    const blog = match
+      ? blogs.find(b => b.id === match.params.id)
+      : null
+    
+    if(!blog) {
+      return(
+      <div>
+        <Togglable
+          ref={blogFormRef}
+          openButtonLabel='create new blog'
+          closeButtonLabel='cancel'
+        >
+          <h2>create new</h2>
+          <BlogForm addBlog={addBlog} />
+        </Togglable>
 
-      <Blogs
-        blogs={blogs}
-        updateBlog={renewBlog}
-        removeBlog={removeBlog}
-        currentUser={user} />
-    </div>
-  )
+        <Blogs
+          blogs={blogs}
+          updateBlog={renewBlog}
+          removeBlog={removeBlog}
+          currentUser={user} />
 
-  
+      </div>
+      )
+    }
+
+    return(
+      <Blog
+        showDetails={true}
+        key={blog.id}
+        blog={blog}
+        update={renewBlog}
+        remove={removeBlog}
+        currentUser={user}        
+      />
+    )
+  }
+
   const mainPage = () => (
     <div>
       <h2>blogs</h2>
@@ -121,7 +142,11 @@ const App = () => {
       <CurrentUser />
 
       <Router>
+
         <Switch>
+          <Route path ='/blogs/:id'>
+            <BlogsPage />
+          </Route>
           <Route path ='/users'>
             <Users />
           </Route>

@@ -1,12 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
-const Blog = ({ blog, update, remove, currentUser }) => {
-  const VIEW_BUTTON_TEXT = 'view'
-  const HIDE_BUTTON_TEXT = 'hide'
+const Blog = ({ blog, update, remove, currentUser, showDetails }) => {
   const LIKE_BUTTON_TEXT = 'like'
-
-  const [showDetails, setShowDetails] = useState(false)
 
   const hideWhenDetails = { display: showDetails ? 'none' : '' }
   const showWhenDetails = { display: showDetails ? '' : 'none' }
@@ -16,23 +13,6 @@ const Blog = ({ blog, update, remove, currentUser }) => {
       ? ''
       : 'none'
   }
-
-
-  const toggleShowDetails = () => {
-    setShowDetails(!showDetails)
-  }
-
-  const toggleButton = (buttonLabel) => (
-    <button id='toggle-blog-view' onClick={toggleShowDetails}>
-      {buttonLabel}
-    </button>
-  )
-
-  const clickableTitle = (title) => (
-    <span onClick={toggleShowDetails}>
-      {title}
-    </span>
-  )
 
   const likeButton = () => (
     <button onClick={handleLike}>{LIKE_BUTTON_TEXT}</button>
@@ -58,14 +38,14 @@ const Blog = ({ blog, update, remove, currentUser }) => {
 
   return(
     <div>
-      <div style={hideWhenDetails} className='blog blogheader'>
-        <p>{clickableTitle(blog.title)} {blog.author} {toggleButton(VIEW_BUTTON_TEXT)}</p>
+      <div style={hideWhenDetails} className='bloglist blogheader'>
+        <p><Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link></p>
       </div>
       <div style={showWhenDetails} className='blog blogdetails'>
-        <p>{clickableTitle(blog.title)} {blog.author} {toggleButton(HIDE_BUTTON_TEXT)}</p>
+        <h2>{blog.title} {blog.author}</h2>
         <p>{blog.url}</p>
         <p>likes {blog.likes ? blog.likes : 0} {likeButton()}</p>
-        <p>{blog.user.name}</p>
+        <p>Added by {blog.user.name}</p>
         <p>{deleteButton()}</p>
       </div>
     </div>
