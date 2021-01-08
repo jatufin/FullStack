@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
+
 const Blog = ({ blog, update, remove, currentUser, showDetails }) => {
   const LIKE_BUTTON_TEXT = 'like'
 
@@ -36,6 +37,23 @@ const Blog = ({ blog, update, remove, currentUser, showDetails }) => {
     remove(blog)
   }
 
+  const Comments = () => {
+    if(!blog.comments || blog.comments.length === 0) {
+      return null
+    }
+
+    return (
+      <div>
+        <h2>comments</h2>
+        <ul>
+          {blog.comments.map((comment, index) => (
+            <li key={index}>{comment}</li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+  
   return(
     <div>
       <div style={hideWhenDetails} className='bloglist blogheader'>
@@ -47,6 +65,8 @@ const Blog = ({ blog, update, remove, currentUser, showDetails }) => {
         <p>likes {blog.likes ? blog.likes : 0} {likeButton()}</p>
         <p>Added by {blog.user.name}</p>
         <p>{deleteButton()}</p>
+
+        <Comments />
       </div>
     </div>
   )
