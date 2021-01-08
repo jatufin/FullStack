@@ -1,11 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 
 const Blog = ({ blog, update, remove, currentUser, showDetails }) => {
-  const LIKE_BUTTON_TEXT = 'like'
-
   const hideWhenDetails = { display: showDetails ? 'none' : '' }
   const showWhenDetails = { display: showDetails ? '' : 'none' }
 
@@ -16,7 +14,7 @@ const Blog = ({ blog, update, remove, currentUser, showDetails }) => {
   }
 
   const likeButton = () => (
-    <button onClick={handleLike}>{LIKE_BUTTON_TEXT}</button>
+    <button onClick={handleLike}>like</button>
   )
 
   const handleLike = () => {
@@ -38,18 +36,41 @@ const Blog = ({ blog, update, remove, currentUser, showDetails }) => {
   }
 
   const Comments = () => {
-    if(!blog.comments || blog.comments.length === 0) {
-      return null
+    const [comment, setComment] = useState('')
+
+    const sendComment = () => {
+      const newComments = blog.comments.concat(comment)
+      blog.comments = newComments
+
+      update(blog)
     }
 
-    return (
-      <div>
-        <h2>comments</h2>
+    const CommentList = () => {
+      if(!blog.comments) {
+        return (<h2>Ei kommentteja</h2>)
+      }
+
+      return (
         <ul>
           {blog.comments.map((comment, index) => (
             <li key={index}>{comment}</li>
           ))}
         </ul>
+      )
+    }
+
+    return (
+      <div>
+        <h2>comments</h2>
+        <form onSubmit={sendComment}>
+          <input
+            id='comment'
+            type='text'
+            onChange={({ target }) => setComment(target.value)}
+          />
+          <button type='submit'>add comment</button>
+        </form>
+        <CommentList />
       </div>
     )
   }

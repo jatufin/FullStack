@@ -30,7 +30,8 @@ const update = async updatedObject => {
     author: updatedObject.author,
     url: updatedObject.url,
     likes: updatedObject.likes,
-    user: updatedObject.user
+    user: updatedObject.user,
+    comments: updatedObject.comments
   }
 
   const response = await axios.put(url, objectToSend)
