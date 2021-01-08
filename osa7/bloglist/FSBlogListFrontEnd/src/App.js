@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import {
   BrowserRouter as Router,
-  Switch, Route, useRouteMatch
+  Switch, Route, Link, useRouteMatch
 } from 'react-router-dom'
 
 import Blog from './components/Blog'
@@ -16,6 +16,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import ReduxNotification from './components/ReduxNotification'
 import { initBlogs, createBlog, updateBlog, deleteBlog } from './reducers/blogReducer'
 import { returnSession, loginUser, logoutUser} from './reducers/userReducer'
+
+const padding = {
+  padding: 5
+}
 
 const App = () => {
   const dispatch = useDispatch()
@@ -89,10 +93,10 @@ const App = () => {
   )
   
   const CurrentUser = () => (
-    <div>
-      <p>{user.name} logged in</p>
-      <button id='logout-button' onClick={() => {handleLogout()}}>logout</button>  
-    </div>
+      <span>
+        {user.name} logged in&nbsp;
+        <button id='logout-button' onClick={() => {handleLogout()}}>logout</button>  
+      </span>
   )
   
   const BlogsPage = () => {
@@ -137,12 +141,14 @@ const App = () => {
 
   const mainPage = () => (
     <div>
-      <h2>blogs</h2>
       <ReduxNotification />
-      <CurrentUser />
-
       <Router>
-
+        <div className='navigation'>
+          <Link style={padding} to='/'>blogs</Link>
+          <Link style={padding} to='/users'>users</Link>
+          <CurrentUser />
+        </div>
+        <h2>blog app</h2>
         <Switch>
           <Route path ='/blogs/:id'>
             <BlogsPage />
