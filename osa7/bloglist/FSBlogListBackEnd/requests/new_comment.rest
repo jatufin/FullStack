@@ -2,5 +2,5 @@ POST http://localhost:3001/api/blogs/5fe29fceab88eff94f617d71/comments
 Content-Type: application/json
 
 {
-  "comment": "2222 Ihan oikea kommentti!"
+  "comment": "Ihan oikea kommentti!"
 }

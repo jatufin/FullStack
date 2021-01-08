@@ -10,12 +10,12 @@ import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
 
-// import Notification from './components/Notification'
-
 import { useDispatch, useSelector } from 'react-redux'
 import ReduxNotification from './components/ReduxNotification'
 import { initBlogs, createBlog, updateBlog, deleteBlog } from './reducers/blogReducer'
 import { returnSession, loginUser, logoutUser} from './reducers/userReducer'
+
+import { Button, Form } from 'react-bootstrap'
 
 const padding = {
   padding: 5
@@ -76,26 +76,30 @@ const App = () => {
     <div>
       <h2>log in to application</h2>
       <ReduxNotification />
-      <form onSubmit={handleLogin}>
-        <p><input
-          id='username'
-          type='text'
-          onChange={ ({ target }) => setUsername(target.value)}
-        /></p>
-        <p><input
-          id='password'
-          type='password'
-          onChange={ ({ target }) => setPassword(target.value)}
-        /></p>
-        <button id='login-button' type='submit'>login</button>
-      </form>
+      <Form onSubmit={handleLogin}>
+        <Form.Group>
+          <Form.Label>username:</Form.Label>
+          <Form.Control
+            id='username'
+            type='text'
+            onChange={ ({ target }) => setUsername(target.value)}
+          />
+          <Form.Label>password:</Form.Label>
+          <Form.Control
+            id='password'
+            type='password'
+            onChange={ ({ target }) => setPassword(target.value)}
+          />
+          <Button variant='primary' id='login-button' type='submit'>login</Button>
+        </Form.Group>
+      </Form>
     </div>
   )
   
   const CurrentUser = () => (
       <span>
         {user.name} logged in&nbsp;
-        <button id='logout-button' onClick={() => {handleLogout()}}>logout</button>  
+        <Button id='logout-button' onClick={() => {handleLogout()}}>logout</Button>  
       </span>
   )
   
@@ -165,7 +169,7 @@ const App = () => {
   )
 
   return (
-    <div>
+    <div className='container'>
       { user === null
         ? loginPage()
         : mainPage()

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
+import { Button, Form } from 'react-bootstrap'
 
 const Blog = ({ blog, update, remove, currentUser, showDetails }) => {
   const hideWhenDetails = { display: showDetails ? 'none' : '' }
@@ -14,7 +15,7 @@ const Blog = ({ blog, update, remove, currentUser, showDetails }) => {
   }
 
   const likeButton = () => (
-    <button onClick={handleLike}>like</button>
+    <Button onClick={handleLike}>like</Button>
   )
 
   const handleLike = () => {
@@ -23,12 +24,12 @@ const Blog = ({ blog, update, remove, currentUser, showDetails }) => {
   }
 
   const deleteButton = () => (
-    <button
+    <Button
       onClick={handleDelete}
       style={showIfOwner}
     >
       remove
-    </button>
+    </Button>
   )
 
   const handleDelete = () => {
@@ -62,14 +63,17 @@ const Blog = ({ blog, update, remove, currentUser, showDetails }) => {
     return (
       <div>
         <h2>comments</h2>
-        <form onSubmit={sendComment}>
-          <input
-            id='comment'
-            type='text'
-            onChange={({ target }) => setComment(target.value)}
-          />
-          <button type='submit'>add comment</button>
-        </form>
+        <Form onSubmit={sendComment}>
+          <Form.Group>
+
+            <Form.Control
+              id='comment'
+              type='text'
+              onChange={({ target }) => setComment(target.value)}
+            />
+            <Button type='submit'>add comment</Button>
+          </Form.Group>
+        </Form>
         <CommentList />
       </div>
     )
