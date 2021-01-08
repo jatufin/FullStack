@@ -8,7 +8,6 @@ import { initBlogs } from './reducers/blogReducer'
 import { returnSession } from './reducers/userReducer'
 
 
-
 const App = () => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
@@ -17,16 +16,6 @@ const App = () => {
     dispatch(initBlogs())
     dispatch(returnSession())
   }, [dispatch])
-
-  /*
-  if(user === null) {
-    return(
-      <div className='container'>
-        <LoginPage />
-      </div>
-    )
-  }
-  */
 
   return (
     <div className='container'>
