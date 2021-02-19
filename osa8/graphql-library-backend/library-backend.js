@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, UserInputError, gql } = require('apollo-server')
 
 const mongoose = require('mongoose')
 const Book = require('./models/book')
@@ -76,6 +76,8 @@ const resolvers = {
         return books
       }
 
+      // oikeasti pitäisi toteuttaa hakemallaa Authorin
+      // id ja lisäämällä se kirjojen tietokantahaku
       const booksByAuthor = books.filter(book =>
         book.author.name === args.author)
 
@@ -103,7 +105,14 @@ const resolvers = {
       }
 
       const book = new Book({ ...args, author: author })
-      await book.save()
+
+      try {
+        await book.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args
+        })
+      }
 
       return book
     },
@@ -114,7 +123,14 @@ const resolvers = {
       }
 
       const newAuthor = new Author({ name: args.name })
-      newAuthor.save()
+      
+      try {
+        await newAuthor.save()
+      } catch (error) {
+        throw new UserInputeError(error.message, {
+          invalidArgs: args
+        })
+      }
 
       return newAuthor
     },
