@@ -1,24 +1,45 @@
-import React from 'react'
-import { useQuery } from '@apollo/client'
+import React, { useState, useEffect } from 'react'
+import { useQuery, useLazyQuery } from '@apollo/client'
 
-import { ALL_BOOKS } from './queries'
+import { ALL_BOOKS, ALL_GENRES } from './queries'
 
 const Books = (props) => {
-  const result = useQuery(ALL_BOOKS)
+  
+  const resultGenres = useQuery(ALL_GENRES)
+ 
+  // const [books, setBooks] = useState([])
+  const [genre, setGenre] = useState('')
+  const [queryBooks, resultBooks] = useLazyQuery(ALL_BOOKS, {
+    variables: { genre }
+  })
 
-  if (!props.show) {
-    return null
-  }
-  if(result.loading) {
+  useEffect(() => {
+    queryBooks()
+  }, [queryBooks])
+
+  if (!props.show) { return null }
+
+  if(resultBooks.loading || resultGenres.loading) {
     return <div>loading books...</div>
   }
 
-  const books = result.data.allBooks
+  const books = resultBooks.data.allBooks
+  const genres = resultGenres.data.allGenres
 
+  const GenreButtons = () => (
+    <div>
+      {genres.map(g =>
+        <button key={g} onClick={() => setGenre(g)}>{g}</button>
+      )}
+      <button onClick={() => setGenre('')}>all books</button>
+    </div>
+  )
   return (
     <div>
       <h2>books</h2>
 
+      {resultBooks.loading ? 'loading books ...' : ''}
+      {genre ? `Genre: ${genre}` : 'All books'}
       <table>
         <tbody>
           <tr>
@@ -39,6 +60,7 @@ const Books = (props) => {
           )}
         </tbody>
       </table>
+      <GenreButtons />
     </div>
   )
 }

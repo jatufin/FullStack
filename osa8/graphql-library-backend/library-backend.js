@@ -56,6 +56,7 @@ const typeDefs = gql`
     authorCount: Int!
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
+    allGenres: [String!]!
     me: User
   }
 
@@ -93,26 +94,49 @@ const resolvers = {
         return Book.find({}).populate('author')
       }
 
-      if(args.genre) {
-        var books = await Book.find({
+      if(!args.author) {
+        const books = await Book.find({
           genres: args.genre
         }).populate('author')
-      } else {
-        var books = await Book.find({}).populate('author')
-      }
-
-      if(!args.author) {
         return books
       }
 
-      // oikeasti pitäisi toteuttaa hakemallaa Authorin
-      // id ja lisäämällä se kirjojen tietokantahaku
-      const booksByAuthor = books.filter(book =>
-        book.author.name === args.author)
+      const author = await Author.findOne({
+        name: args.author
+      })
+      if(!author) {
+        return []
+      }
 
-      return booksByAuthor
+      // const authorId = '602c3cdad00b1b8441ae3855'
+
+      if(!args.genre || args.genre === '') {
+        const books = Book.find({
+          author: author._id
+        }).populate('author')
+        return books
+      }
+      
+      const books = Book.find({
+        genres: args.genre,
+        author: author._id
+      }).populate('author')
+
+      return books
     },
     allAuthors: () => Author.find({}),
+    allGenres: async () => {
+      const books = await Book.find({}).lean()
+
+      let genres = {}
+      for(let i=0; i < books.length; i++) {
+        for(let j=0; j < books[i].genres.length; j++) {
+          genres[books[i].genres[j]] = true
+        }
+      }
+
+      return Object.keys(genres)
+    },
     me: (root, args, context) => {
       return context.currentUser
     }
