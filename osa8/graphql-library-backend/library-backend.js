@@ -36,6 +36,7 @@ const typeDefs = gql`
     published: Int!
     author: Author!
     genres: [String!]!
+    books: [Book!]!
     id: ID!
   }
   type Author {
@@ -148,11 +149,7 @@ const resolvers = {
   },
   Author: {
     bookCount: async (root) => {
-      const books = await Book.find({}).populate('author')
-
-      const booksByAuthor = books.filter(b => b.author.name === root.name)
-
-      return booksByAuthor.length
+      return root.books.length
     }
   },
   Mutation: {
@@ -179,6 +176,14 @@ const resolvers = {
           invalidArgs: args
         })
       }
+
+      if(!author.books) {
+        author.books = [book.id]
+      } else {
+        author.books = author.books.concat(book.id)
+      }
+
+      await author.save()
 
       pubSub.publish('BOOK_ADDED', { bookAdded: book })
       return book

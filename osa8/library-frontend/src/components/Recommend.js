@@ -30,7 +30,7 @@ const Recommend = (props) => {
 
   if (!props.show) { return null }
 
-  if(resultBooks.loading || resultMe.loading) {
+  if(resultBooks.loading || resultMe.loading || !resultMe.data.me) {
     return <div>loading books...</div>
   }
 
