@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { useQuery  } from '@apollo/client'
+import { useQuery, useSubscription  } from '@apollo/client'
 
-import { ALL_BOOKS, MYSELF } from './queries'
+import { ALL_BOOKS, MYSELF, BOOK_ADDED } from './queries'
 
 const Recommend = (props) => {
   const [genre, setGenre] = useState('')
@@ -21,6 +21,12 @@ const Recommend = (props) => {
   useEffect(() => {
     resultBooks.refetch()
   }, [genre]) // eslint-disable-line
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      resultBooks.refetch()
+    }
+  })
 
   if (!props.show) { return null }
 

@@ -1,49 +1,22 @@
 import React, { useState } from 'react'
 
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 
 import { CREATE_BOOK, ALL_BOOKS, ALL_AUTHORS, ALL_GENRES } from './queries'
 
 const NewBook = (props) => {
-  // Needed to refetch the queries
-  const [allGenres, setAllGenres] = useState([])
-
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [published, setPublished] = useState('')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
 
-  const resultGenres = useQuery(ALL_GENRES, {
-    notifyOnNetworkStatusChange: true,
-    onCompleted: (data) => {
-      setAllGenres(data.allGenres)
-    }
-  })
-
   const [ createBook ] = useMutation(CREATE_BOOK, {
-    refetchQueries: () => {
-      resultGenres.refetch()
-
-      let queryArray = [
+    refetchQueries: [
       { query: ALL_AUTHORS },
       { query: ALL_GENRES },
       { query: ALL_BOOKS },
-      {
-        query: ALL_BOOKS,
-        variables: { genre: ''}
-      } ]
-    
-      for(let i=0; i < allGenres.length; i++) {
-        const query = {
-          query: ALL_BOOKS,
-          variables: { genre: allGenres[i]}
-        }
-        queryArray.push(query);
-      }
-
-      return queryArray
-    },
+    ],
     onError: (error) => {
       console.log(error.graphQLErrors[0].message)
     }
@@ -53,15 +26,9 @@ const NewBook = (props) => {
     return null
   }
 
-  if(resultGenres.loading) {
-    return <div>loading genres...</div>
-  }
-
   const submit = async (event) => {
     event.preventDefault()
-    
-    // console.log('add book...')
-
+  
     createBook({ variables: { title: title, author: author, published: parseInt(published), genres }})
     setTitle('')
     setPublished('')

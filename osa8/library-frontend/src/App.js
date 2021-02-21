@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 
 import {
   useApolloClient,
-  useSubscription
+  useSubscription,
 } from '@apollo/client'
 
 import Authors from './components/Authors'
@@ -13,7 +13,7 @@ import Recommend from './components/Recommend'
 import NewBook from './components/NewBook'
 import Birthyear from './components/Birthyear'
 
-import { BOOK_ADDED } from './components/queries'
+import { BOOK_ADDED  } from './components/queries'
 
 const App = () => {
   const [token, setToken] = useState(null)
