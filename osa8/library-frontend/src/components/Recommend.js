@@ -1,41 +1,38 @@
 import React, { useState, useEffect } from 'react'
-import { useQuery } from '@apollo/client'
+import { useQuery  } from '@apollo/client'
 
-import { ALL_BOOKS, ALL_GENRES } from './queries'
+import { ALL_BOOKS, MYSELF } from './queries'
 
-const Books = (props) => {
-  const resultGenres = useQuery(ALL_GENRES)
- 
+const Recommend = (props) => {
   const [genre, setGenre] = useState('')
+  const [username, setUsername] = useState('')
+
   const resultBooks = useQuery(ALL_BOOKS, {
     variables: { genre }
   })
 
+  const resultMe = useQuery(MYSELF, {
+    onCompleted: (data) => {
+      setGenre(data.me.favoriteGenre)
+      setUsername(data.me.username)
+    }
+  })
+  
   useEffect(() => {
     resultBooks.refetch()
   }, [genre]) // eslint-disable-line
 
   if (!props.show) { return null }
 
-  if(resultBooks.loading || resultGenres.loading) {
+  if(resultBooks.loading || resultMe.loading) {
     return <div>loading books...</div>
   }
 
   const books = resultBooks.data.allBooks
-  const genres = resultGenres.data.allGenres
 
-  const GenreButtons = () => (
-    <div>
-      {genres.map(g =>
-        <button key={g} onClick={() => setGenre(g)}>{g}</button>
-      )}
-      <button onClick={() => setGenre('')}>all books</button>
-    </div>
-  )
   return (
     <div>
-      <h2>books</h2>
-      {genre ? `Genre: ${genre}` : 'All books'}
+      <h2>Favorites ({genre}) of {username}</h2>
       <table>
         <tbody>
           <tr>
@@ -55,10 +52,10 @@ const Books = (props) => {
             </tr>
           )}
         </tbody>
-      </table>
-      <GenreButtons />
+      </table>     
     </div>
   )
+
 }
 
-export default Books
+export default Recommend

@@ -10,7 +10,7 @@ const {
 const mongoose = require('mongoose')
 const Book = require('./models/book')
 const Author = require('./models/author')
-const User = require('./models/user')
+const LibraryUser = require('./models/libraryuser')
 
 const jwt = require('jsonwebtoken')
 const JWT_SECRET=process.env.JWT_SECRET
@@ -41,7 +41,7 @@ const typeDefs = gql`
     bookCount: Int!
   }
 
-  type User {
+  type LibraryUser {
     username: String!
     favoriteGenre: String!
     id: ID!
@@ -57,7 +57,7 @@ const typeDefs = gql`
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
     allGenres: [String!]!
-    me: User
+    me: LibraryUser
   }
 
   type Mutation {
@@ -77,7 +77,7 @@ const typeDefs = gql`
     createUser(
       username: String!
       favoriteGenre: String!
-    ): User
+    ): LibraryUser
     login(
       username: String!
       password: String!
@@ -107,8 +107,6 @@ const resolvers = {
       if(!author) {
         return []
       }
-
-      // const authorId = '602c3cdad00b1b8441ae3855'
 
       if(!args.genre || args.genre === '') {
         const books = Book.find({
@@ -209,7 +207,10 @@ const resolvers = {
       return author
     },
     createUser: (root, args) => {
-      const user = new User({ username: args.username })
+      const user = new LibraryUser({
+        username: args.username,
+        favoriteGenre: args.favoriteGenre
+      })
   
       return user.save()
         .catch(error => {
@@ -219,10 +220,10 @@ const resolvers = {
         })
     },
     login: async (root, args) => {
-      const user = await User.findOne({ username: args.username })
+      const user = await LibraryUser.findOne({ username: args.username })
   
-      if ( !user || args.password !== 'secret' ) {
-        throw new UserInputError("wrong credentials")
+      if (!user || args.password !== 'secret') {
+        throw new UserInputError('wrong credentials')
       }
   
       const userForToken = {
@@ -244,7 +245,7 @@ const server = new ApolloServer({
       const decodedToken = jwt.verify(
         auth.substring(7), JWT_SECRET
       )
-      const currentUser = await User
+      const currentUser = await LibraryUser
         .findById(decodedToken.id)
       return { currentUser }
     }
